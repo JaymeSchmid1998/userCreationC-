@@ -60,7 +60,7 @@ namespace UserCreationTool
         }
        
 
-        private async void button3_Click(object sender, EventArgs e)
+        private  void button3_Click(object sender, EventArgs e)
         {
          /*   FirebaseResponse response1 = await C1.GetTaskAsync("DoorCount/node");
             DoorCount t2 = response1.ResultAs<DoorCount>();

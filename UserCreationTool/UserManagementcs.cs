@@ -71,6 +71,12 @@ namespace UserCreationTool
             btn3.Text = "Retrieve data";
             btn3.Name = "btn3";
             btn3.UseColumnTextForButtonValue = true;
+            DataGridViewButtonColumn btn4 = new DataGridViewButtonColumn();
+            dataGridView1.Columns.Add(btn4);
+            btn4.HeaderText = "Create id card";
+            btn4.Text = "Create id card";
+            btn4.Name = "btn4";
+            btn4.UseColumnTextForButtonValue = true;
 
             LoadUserData();
         }
@@ -182,7 +188,7 @@ namespace UserCreationTool
 
                 SetResponse resp1 = await C1.SetTaskAsync("UserCount/node", LocData);
                 label9.Text = data.AuthCode;
-                button2.Visible = true;
+            //    button2.Visible = true;
               //  button3.Visible = true;
             }
 
@@ -230,7 +236,7 @@ namespace UserCreationTool
                             //  Data result = response.ResultAs<Data>();
                             check = true;
                             MessageBox.Show("deleted");
-                            button2.Visible = false;
+                         //   button2.Visible = false;
                          //   button3.Visible = false;
                             textBox1.Text = "";
                             textBox2.Text = "";
@@ -942,8 +948,301 @@ async void EditUserData(string placeName,string firstName,string lastName,string
                 }
 
             }
+            if (e.ColumnIndex == 9)
+            {
+                // MessageBox.Show();
+                String ABC = e.RowIndex.ToString();
+                MessageBox.Show(ABC);
+                if (dataGridView1.SelectedCells.Count > 0)
+                {
+                    int selectedrowindex = e.RowIndex;
+                    DataGridViewRow selectedRow = dataGridView1.Rows[selectedrowindex];
+                    string placeName = Convert.ToString(selectedRow.Cells["Place name"].Value);
+                    string firstName = Convert.ToString(selectedRow.Cells["First name"].Value);
+                    string lastName = Convert.ToString(selectedRow.Cells["last name"].Value);
+                    string status1 = Convert.ToString(selectedRow.Cells["status"].Value);
+                    string authC1 = Convert.ToString(selectedRow.Cells["authcode "].Value);
+                    string auth1 = Convert.ToString(selectedRow.Cells["authlevel"].Value);
+                    //    
+                    createId(placeName,firstName,lastName,status1,auth1,authC1);
+                }
+
+            }
         }
 
+        async void createId(string PlaceName,string FirstName,string LastName,string status,string authlevel,string authcode)
+        {
+            string LocVar = GlobalVar.GlobalVar3;
+            //CHECK IF ITS VALID 
         
+                //checks if the data is in the db...
+
+
+                FirebaseResponse response1 = await C1.GetTaskAsync("UserCount/node");
+                UserCounter t2 = response1.ResultAs<UserCounter>();
+
+                int checkV = Convert.ToInt32(t2.cnt);
+                //this part gets data from the data base 
+                bool found = false;
+                while (found == false && checkV > 0)
+                {
+                    try
+                    {
+                        FirebaseResponse response = await C1.GetTaskAsync("Users/" + checkV);
+                        UserData t1 = response.ResultAs<UserData>();
+                        if (PlaceName == t1.PlaceName && FirstName == t1.FirstName && LastName == t1.LastName && status == t1.Status && authlevel == t1.AuthLevel && authcode == t1.AuthCode)
+                        {
+                            //THIS IS WORKING
+                            if (t1.CodeUsed == "No")
+                            {//send out code 
+
+                                string path = LocVar;
+
+                                string fileName = path + @"\UserCreation.txt";
+                            MessageBox.Show(fileName);
+                   //         fileName =fileName.Replace(@"\\",@"\");
+
+                                try
+                                {
+                                    // Check if file already exists. If yes, delete it.     
+                                    if (File.Exists(fileName))
+                                    {
+                                        File.Delete(fileName);
+                                    }
+
+                                    // Create a new file     
+                                    using (StreamWriter FileWrite = File.CreateText(fileName))
+                                    {
+
+                                        FileWrite.WriteLine("AuthCode: {0:G}", t1.AuthCode);
+
+                                    }
+
+                                    // Open the stream and read it back.    
+                                    using (StreamReader sr = File.OpenText(fileName))
+                                    {
+                                        string s = "";
+                                        while ((s = sr.ReadLine()) != null)
+                                        {
+                                            Console.WriteLine(s);
+                                        }
+                                    }
+
+
+                                    var data = new UserData
+                                    {
+                                        UserId = checkV.ToString(),
+                                        //  placeName = textBox3.Text,
+                                        FirstName = FirstName,
+                                        LastName = LastName,
+                                        PlaceName = PlaceName,
+                                        //authcode
+                                        CodeUsed = "Yes",
+                                        AuthCode = authcode,
+
+                                        //status
+                                        Status = status,
+                                        //auth level
+                                        AuthLevel = authlevel,
+
+                                    };
+
+                                    SetResponse response6 = await C1.SetTaskAsync("Users/" + checkV, data);
+                                    Data result = response6.ResultAs<Data>();
+                                    MessageBox.Show("updated");
+
+                                }
+                                catch (Exception Ex)
+                                {
+                                    Console.WriteLine(Ex.ToString());
+                                }
+
+
+
+
+
+                            }
+                            else
+                            {
+                                //generate a new code then write it to the file
+
+
+                                FirebaseResponse response2 = await C1.GetTaskAsync("UserCount/node");
+                                UserCounter t3 = response2.ResultAs<UserCounter>();
+                                int checkV1 = Convert.ToInt32(t3.cnt);
+
+                                long randgen = getrand1();
+                                bool isrand = false;
+                                while (isrand == false && checkV1 > 0)
+                                {
+                                    randgen = getrand1();
+
+                                    try
+                                    {
+                                        FirebaseResponse response3 = await C1.GetTaskAsync("Users/" + checkV1);
+                                        UserData t13 = response3.ResultAs<UserData>();
+                                        if (randgen.Equals(t13.AuthCode))
+                                        {
+                                            isrand = true;
+                                            randgen = 0;
+                                        }
+                                    }
+                                    catch
+                                    {
+
+                                    }
+                                    checkV1--;
+
+
+                                }
+                                if (isrand == false && randgen != 0)
+                                {
+                                    MessageBox.Show("not found");
+                                    //save this to the global variable
+                                    GlobalVar.GlobalVar2 = randgen;
+                                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                string path = LocVar;
+
+                                string fileName = path + @"\UserCreation.txt";
+
+                                try
+                                {
+                                    // Check if file already exists. If yes, delete it.     
+                                    if (File.Exists(fileName))
+                                    {
+                                        File.Delete(fileName);
+                                    }
+
+                                    // Create a new file     
+                                    using (StreamWriter FileWrite = File.CreateText(fileName))
+                                    {
+
+                                        FileWrite.WriteLine("AuthCode: {0:G}", GlobalVar.GlobalVar2.ToString());
+
+                                    }
+
+                                    // Open the stream and read it back.    
+                                    using (StreamReader sr = File.OpenText(fileName))
+                                    {
+                                        string s = "";
+                                        while ((s = sr.ReadLine()) != null)
+                                        {
+                                            Console.WriteLine(s);
+                                        }
+                                    }
+
+
+                                    var data = new UserData
+                                    {
+                                        UserId = checkV.ToString(),
+                                        //  placeName = textBox3.Text,
+                                        FirstName = FirstName,
+                                        LastName = LastName,
+                                        PlaceName = PlaceName,
+                                        //authcode
+                                        CodeUsed = "Yes",
+                                        AuthCode = GlobalVar.GlobalVar2.ToString(),
+
+                                        //status
+                                        Status = status,
+                                        //auth level
+                                        AuthLevel = authlevel,
+
+                                    };
+
+                                    SetResponse response6 = await C1.SetTaskAsync("Users/" + checkV, data);
+                                    Data result = response6.ResultAs<Data>();
+                                    MessageBox.Show("updated");
+
+                                }
+                                catch (Exception Ex)
+                                {
+                                    Console.WriteLine(Ex.ToString());
+                                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            }
+
+
+                            found = true;
+
+
+
+
+
+
+                        }
+                    }
+                    catch
+                    {
+
+                    }
+
+
+
+
+                    checkV--;
+                }
+                if (found == false)
+                {
+                    MessageBox.Show("not found");
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
+        }
     }
 }

@@ -24,7 +24,7 @@ namespace UserCreationTool
             set { _generatednum = value; }
         }
 
-        private static string _path = @"C:\Users\Zbook\Desktop\test";
+        private static string _path = @"C:\Users\zbook j\Desktop\test";
 
         public static string GlobalVar3
         {
