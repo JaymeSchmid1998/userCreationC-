@@ -62,11 +62,11 @@ namespace UserCreationTool
             }
             if (found == false)
             {
-                MessageBox.Show("not found");
+                MessageBox.Show("UserName or password incorrect");
             }
             else if (found == true)
             {
-                MessageBox.Show(" you have logged in");
+               // MessageBox.Show("");
                 //change form
                 this.Visible = false;
                 LocationDashBoard f1 = new LocationDashBoard();

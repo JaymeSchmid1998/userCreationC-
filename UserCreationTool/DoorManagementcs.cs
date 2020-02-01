@@ -58,6 +58,7 @@ namespace UserCreationTool
             SetResponse resp1 = await C1.SetTaskAsync("DoorCount/node", LocData);
             button3.Visible = true;
         }
+       
 
         private async void button3_Click(object sender, EventArgs e)
         {
@@ -111,6 +112,52 @@ namespace UserCreationTool
         {
 
         }
+
+        async public void LoadData()
+        {
+            datT.Rows.Clear();
+            FirebaseResponse response1 = await C1.GetTaskAsync("DoorCount/node");
+            DoorCount t2 = response1.ResultAs<DoorCount>();
+
+
+            int checkV = Convert.ToInt32(t2.cnt);
+
+            while (true && checkV > 0)
+            {
+                try
+                {
+                    FirebaseResponse response2 = await C1.GetTaskAsync("Doors/" + checkV);
+                    DoorData obj2 = response2.ResultAs<DoorData>();
+
+                    if (label1.Text == obj2.placeName)
+                    {
+                        DataRow row = datT.NewRow();
+
+
+
+                        row["PlaceName"] = obj2.placeName;
+                        row["DoorName"] = obj2.DoorName;
+                        row["Status"] = obj2.Status;
+                        row["AuthLvl"] = obj2.AuthLevel;
+                       
+                       // row["Edit"] =buttonColumn;
+                              
+                        datT.Rows.Add(row);
+
+
+                       
+                    }
+                }
+                catch
+                {
+
+                }
+                checkV--;
+            }
+
+        }
+
+
 
         private  async void button4_Click(object sender, EventArgs e)
         {
@@ -173,52 +220,50 @@ namespace UserCreationTool
                 Console.Write("connection successful");
             }
 
-            datT.Columns.Add("Place name");
-            datT.Columns.Add("Door name");
+            datT.Columns.Add("PlaceName");
+            datT.Columns.Add("DoorName");
             datT.Columns.Add("Status");
-            datT.Columns.Add("Auth lvl");
+            datT.Columns.Add("AuthLvl");
+           
+
+
+            // datT.Columns.Add("Edit");
             dataGridView1.DataSource = datT;
+
+            DataGridViewButtonColumn btn = new DataGridViewButtonColumn();
+            dataGridView1.Columns.Add(btn);
+            btn.HeaderText = "Edit";
+            btn.Text = "Edit";
+            btn.Name = "btn";
+            btn.UseColumnTextForButtonValue = true;
+            DataGridViewButtonColumn btn2 = new DataGridViewButtonColumn();
+            dataGridView1.Columns.Add(btn2);
+            btn2.HeaderText = "Delete";
+            btn2.Text = "Delete";
+            btn2.Name = "btn2";
+            btn2.UseColumnTextForButtonValue = true;
+
+
+            LoadData();
+
+
+
+
+
+
+
+
+
+
+
+
         }
 
-        private async void button2_Click_1(object sender, EventArgs e)
+        private  void button2_Click_1(object sender, EventArgs e)
         {
-            /* datT.Columns.Add("Place name");
-             datT.Columns.Add("Door name");
-             datT.Columns.Add("Status");
-             datT.Columns.Add("Auth lvl");*/
-
-            FirebaseResponse response1 = await C1.GetTaskAsync("DoorCount/node");
-            DoorCount t2 = response1.ResultAs<DoorCount>();
-
-
-            int checkV = Convert.ToInt32(t2.cnt);
-
-            while (true && checkV > 0)
-            {
-                try
-                {
-                    FirebaseResponse response2 = await C1.GetTaskAsync("Doors/" + checkV);
-                   DoorData obj2 = response2.ResultAs<DoorData>();
-
-                    if (label1.Text == obj2.placeName) { 
-                    DataRow row = datT.NewRow();
-
-
-
-                    row["Place name"] = obj2.placeName;
-                    row["Door name"] = obj2.DoorName;
-                    row["Status"] = obj2.Status;
-                    row["Auth lvl"] = obj2.AuthLevel;
-
-                    datT.Rows.Add(row);
-                    }
-                }
-                catch
-                {
-
-                }
-                checkV--;
-            }
+            // dataGridView1.DataSource = null;
+            datT.Rows.Clear();
+            LoadData();
 
 
         }
@@ -228,6 +273,31 @@ namespace UserCreationTool
             this.Visible = false;
             LocationDashBoard ld = new LocationDashBoard();
             ld.ShowDialog();
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            //LoadData();
+            if (e.ColumnIndex == 4)
+            {
+               // MessageBox.Show();
+                String ABC = e.RowIndex.ToString();
+                MessageBox.Show(ABC);
+            }
+            if (e.ColumnIndex == 5)
+            {
+                // MessageBox.Show();
+                String ABC = e.RowIndex.ToString();
+                MessageBox.Show(ABC);
+                if (dataGridView1.SelectedCells.Count > 0)
+                {
+                    int selectedrowindex = e.RowIndex;
+                    DataGridViewRow selectedRow = dataGridView1.Rows[selectedrowindex];
+                    string a = Convert.ToString(selectedRow.Cells["PlaceName"].Value);
+                    MessageBox.Show(a);
+                }
+
+            }
         }
     }
 }
