@@ -53,6 +53,26 @@ namespace UserCreationTool
             datT.Columns.Add("status");
             datT.Columns.Add("authlevel");
             dataGridView1.DataSource = datT;
+            DataGridViewButtonColumn btn = new DataGridViewButtonColumn();
+            dataGridView1.Columns.Add(btn);
+            btn.HeaderText = "Edit";
+            btn.Text = "Edit";
+            btn.Name = "btn";
+            btn.UseColumnTextForButtonValue = true;
+            DataGridViewButtonColumn btn2 = new DataGridViewButtonColumn();
+            dataGridView1.Columns.Add(btn2);
+            btn2.HeaderText = "Delete";
+            btn2.Text = "Delete";
+            btn2.Name = "btn2";
+            btn2.UseColumnTextForButtonValue = true;
+            DataGridViewButtonColumn btn3 = new DataGridViewButtonColumn();
+            dataGridView1.Columns.Add(btn3);
+            btn3.HeaderText = "Retrieve data";
+            btn3.Text = "Retrieve data";
+            btn3.Name = "btn3";
+            btn3.UseColumnTextForButtonValue = true;
+
+            LoadUserData();
         }
 
         private async void button1_Click(object sender, EventArgs e)
@@ -163,7 +183,7 @@ namespace UserCreationTool
                 SetResponse resp1 = await C1.SetTaskAsync("UserCount/node", LocData);
                 label9.Text = data.AuthCode;
                 button2.Visible = true;
-                button3.Visible = true;
+              //  button3.Visible = true;
             }
 
 
@@ -211,7 +231,7 @@ namespace UserCreationTool
                             check = true;
                             MessageBox.Show("deleted");
                             button2.Visible = false;
-                            button3.Visible = false;
+                         //   button3.Visible = false;
                             textBox1.Text = "";
                             textBox2.Text = "";
                             comboBox1.Text = "";
@@ -237,9 +257,9 @@ namespace UserCreationTool
 
         }
 
-        private async void button4_Click(object sender, EventArgs e)
+       private void button4_Click(object sender, EventArgs e)
         {
-            FirebaseResponse response1 = await C1.GetTaskAsync("UserCount/node");
+          /*  FirebaseResponse response1 = await C1.GetTaskAsync("UserCount/node");
             UserCounter t2 = response1.ResultAs<UserCounter>();
 
             int checkV = Convert.ToInt32(t2.cnt);
@@ -263,7 +283,7 @@ namespace UserCreationTool
 
                                 MessageBox.Show(" found");
                                 found = true;
-                                button3.Visible = true;
+                               // button3.Visible = true;
                                 button2.Visible = true;
 
 
@@ -285,12 +305,13 @@ namespace UserCreationTool
             if (found == false)
             {
                 MessageBox.Show("not found");
-            }
+            }*/
         }
 
-        private async void button5_Click(object sender, EventArgs e)
+        private  void button5_Click(object sender, EventArgs e)
         {
-            FirebaseResponse response1 = await C1.GetTaskAsync("UserCount/node");
+            LoadUserData();
+           /* FirebaseResponse response1 = await C1.GetTaskAsync("UserCount/node");
             LocationCounter t2 = response1.ResultAs<LocationCounter>();
 
 
@@ -304,12 +325,12 @@ namespace UserCreationTool
                     UserData obj2 = response2.ResultAs<UserData>();
                   
 
-                    /* datT.Columns.Add("Place name");
+                     datT.Columns.Add("Place name");
                      datT.Columns.Add("First name");
                      datT.Columns.Add("last name");
                      datT.Columns.Add("authcode ");
                      datT.Columns.Add("status");
-                     datT.Columns.Add("authlevel");*/
+                     datT.Columns.Add("authlevel");
                     if (label1.Text == obj2.PlaceName)
                     {
                         DataRow row = datT.NewRow();
@@ -322,6 +343,8 @@ namespace UserCreationTool
 
                         datT.Rows.Add(row);
 
+                        
+
                     }
                    
                 }
@@ -330,7 +353,7 @@ namespace UserCreationTool
 
                 }
                 checkV--;
-            }
+            }*/
         }
 
         private async void button2_Click(object sender, EventArgs e)
@@ -633,5 +656,294 @@ namespace UserCreationTool
             LocationDashBoard ld = new LocationDashBoard();
             ld.ShowDialog();
         }
+
+        async void  deleteUser(string PlaceName1, string firstName1, string lastname1)
+        {
+            FirebaseResponse response1 = await C1.GetTaskAsync("UserCount/node");
+            LocationCounter t2 = response1.ResultAs<LocationCounter>();
+
+            int checkV = Convert.ToInt32(t2.cnt);
+
+            //this part updates 
+
+            var data = new UserData
+            {
+                PlaceName = PlaceName1,
+                FirstName = firstName1,
+                LastName = lastname1
+
+            };
+            bool check = false;
+            while (check == false && checkV > 0)
+            {
+                FirebaseResponse response2 = await C1.GetTaskAsync("Users/" + checkV);
+                UserData t1 = response2.ResultAs<UserData>();
+
+                if (t1.PlaceName == PlaceName1)
+                {
+                    if (t1.FirstName == firstName1)
+                    {
+                        if (t1.LastName == lastname1)
+                        {
+                            FirebaseResponse response = await C1.DeleteTaskAsync("Users/" + checkV);
+                            //  Data result = response.ResultAs<Data>();
+                            check = true;
+                            MessageBox.Show("deleted");
+                           // button2.Visible = false;
+                           // button3.Visible = false;
+                            textBox1.Text = "";
+                            textBox2.Text = "";
+                            comboBox1.Text = "";
+                            comboBox2.Text = "";
+                            label9.Text = "no code";
+                        }
+                    }
+                    //SetResponse response = await C1.SetTaskAsync("Location/" + checkV, data);
+                    //this deletes specified
+
+                }
+
+
+
+                checkV--;
+            }
+
+            if (check == false)
+            {
+                MessageBox.Show("cannot delete as its not found");
+            }
+            LoadUserData();
+        }
+async void LoadUserData()
+        {
+            datT.Rows.Clear();
+            FirebaseResponse response1 = await C1.GetTaskAsync("UserCount/node");
+            LocationCounter t2 = response1.ResultAs<LocationCounter>();
+
+
+            int checkV = Convert.ToInt32(t2.cnt);
+
+            while (true && checkV > 0)
+            {
+                try
+                {
+                    FirebaseResponse response2 = await C1.GetTaskAsync("Users/" + checkV);
+                    UserData obj2 = response2.ResultAs<UserData>();
+
+
+                    /* datT.Columns.Add("Place name");
+                     datT.Columns.Add("First name");
+                     datT.Columns.Add("last name");
+                     datT.Columns.Add("authcode ");
+                     datT.Columns.Add("status");
+                     datT.Columns.Add("authlevel");*/
+                    if (label1.Text == obj2.PlaceName)
+                    {
+                        DataRow row = datT.NewRow();
+                        row["Place name"] = obj2.PlaceName;
+                        row["First name"] = obj2.FirstName;
+                        row["last name"] = obj2.LastName;
+                        row["authcode "] = obj2.AuthCode;
+                        row["status"] = obj2.Status;
+                        row["authlevel"] = obj2.AuthLevel;
+
+                        datT.Rows.Add(row);
+
+
+
+                    }
+
+                }
+                catch
+                {
+
+                }
+                checkV--;
+            }
+        }
+
+async void EditUserData(string placeName,string firstName,string lastName,string Authcode,string AuthLevel,string status )
+        {
+           
+
+
+            FirebaseResponse response1 = await C1.GetTaskAsync("UserCount/node");
+            LocationCounter t2 = response1.ResultAs<LocationCounter>();
+
+            int checkV = Convert.ToInt32(t2.cnt);
+
+            //this part updates 
+
+            var data = new UserData
+            {
+                UserId = (Convert.ToInt32(t2.cnt) + 1).ToString(),
+                //  placeName = textBox3.Text,
+                FirstName = textBox1.Text,
+                LastName = textBox2.Text,
+                PlaceName = label1.Text,
+                //authcode
+                CodeUsed = "No",
+                AuthCode = Authcode,
+
+                //status
+                Status = comboBox1.Text,
+                //auth level
+                AuthLevel = comboBox2.Text,
+
+            };
+            bool check = false;
+            while (check == false && checkV > 0)
+            {
+                FirebaseResponse response2 = await C1.GetTaskAsync("Users/" + checkV);
+                UserData t1 = response2.ResultAs<UserData>();
+
+                if (t1.PlaceName == placeName)
+                {
+                    if (t1.FirstName == firstName)
+                    {
+                        if (t1.LastName == lastName)
+                        {
+                            FirebaseResponse response = await C1.UpdateTaskAsync("Users/" + checkV,data);
+                            //  Data result = response.ResultAs<Data>();
+                            check = true;
+                            MessageBox.Show("Updated");
+                            // button2.Visible = false;
+                            // button3.Visible = false;
+                            textBox1.Text = "";
+                            textBox2.Text = "";
+                            comboBox1.Text = "";
+                            comboBox2.Text = "";
+                            label9.Text = "no code";
+                        }
+                    }
+                    //SetResponse response = await C1.SetTaskAsync("Location/" + checkV, data);
+                    //this deletes specified
+
+                }
+
+
+
+                checkV--;
+            }
+
+            if (check == false)
+            {
+                MessageBox.Show("cannot delete as its not found");
+            }
+            LoadUserData();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        }
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+            //LoadData();
+            if (e.ColumnIndex == 6)
+            {
+                // MessageBox.Show();
+                String ABC = e.RowIndex.ToString();
+                // MessageBox.Show(ABC);
+                if (dataGridView1.SelectedCells.Count > 0)
+                {
+                    int selectedrowindex = e.RowIndex;
+                    DataGridViewRow selectedRow = dataGridView1.Rows[selectedrowindex];
+                    string placeName = Convert.ToString(selectedRow.Cells["Place name"].Value);
+                    string firstN1 = textBox1.Text;
+                    string lastN1 = textBox2.Text;
+                    string status1 = comboBox1.Text;
+                    string authC1 = comboBox2.Text;
+                    string auth1 = label9.Text;
+                    if (textBox1.Text != null && textBox1.Text != "" && comboBox1.Text != "" && comboBox1.Text != "select one " && comboBox2.Text != "lowest" && comboBox2.Text != "highest" && comboBox2.Text != "")
+                    {
+                        EditUserData(placeName,firstN1,lastN1,auth1,authC1,status1);
+                    }
+                    else
+                    {
+                        MessageBox.Show("data cannot be invalid or blank!");
+                    }
+
+                }
+            }
+            if (e.ColumnIndex == 7)
+            {
+                // MessageBox.Show();
+                String ABC = e.RowIndex.ToString();
+                MessageBox.Show(ABC);
+                if (dataGridView1.SelectedCells.Count > 0)
+                {
+                    int selectedrowindex = e.RowIndex;
+                    DataGridViewRow selectedRow = dataGridView1.Rows[selectedrowindex];
+                    string placeName = Convert.ToString(selectedRow.Cells["Place name"].Value);
+                    string firstName = Convert.ToString(selectedRow.Cells["First name"].Value);
+                    string lastName = Convert.ToString(selectedRow.Cells["last name"].Value);
+                    //    
+                    deleteUser(placeName, firstName, lastName);
+                }
+
+            }
+            if (e.ColumnIndex == 8)
+            {
+                // MessageBox.Show();
+                String ABC = e.RowIndex.ToString();
+                MessageBox.Show(ABC);
+                if (dataGridView1.SelectedCells.Count > 0)
+                {
+
+
+                    /*
+                       row["Place name"] = obj2.PlaceName;
+                                row["First name"] = obj2.FirstName;
+                                row["last name"] = obj2.LastName;
+                                row["authcode "] = obj2.AuthCode;
+                                row["status"] = obj2.Status;
+                                row["authlevel"] = obj2.AuthLevel; 
+
+
+
+
+                    */
+
+
+
+
+                    int selectedrowindex = e.RowIndex;
+                    DataGridViewRow selectedRow = dataGridView1.Rows[selectedrowindex];
+                    string placeName = Convert.ToString(selectedRow.Cells["Place name"].Value);
+                    string firstN1 = Convert.ToString(selectedRow.Cells["First name"].Value);
+                    string lastN1 = Convert.ToString(selectedRow.Cells["last name"].Value);
+                    string status1 = Convert.ToString(selectedRow.Cells["status"].Value);
+                    string authC1 = Convert.ToString(selectedRow.Cells["authcode "].Value);
+                    string auth1 = Convert.ToString(selectedRow.Cells["authlevel"].Value);
+                    textBox1.Text = firstN1;
+                    textBox2.Text = lastN1;
+                    comboBox2.Text = auth1;
+                    comboBox1.Text = status1;
+                    label9.Text = authC1;
+                }
+
+            }
+        }
+
+        
     }
 }
