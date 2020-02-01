@@ -51,6 +51,25 @@ namespace UserCreationTool
             datT.Columns.Add("USERNAME NAME");
             datT.Columns.Add("PASSWORD");
             dataGridView1.DataSource = datT;
+            DataGridViewButtonColumn btn = new DataGridViewButtonColumn();
+            dataGridView1.Columns.Add(btn);
+            btn.HeaderText = "Edit";
+            btn.Text = "Edit";
+            btn.Name = "btn";
+            btn.UseColumnTextForButtonValue = true;
+            DataGridViewButtonColumn btn2 = new DataGridViewButtonColumn();
+            dataGridView1.Columns.Add(btn2);
+            btn2.HeaderText = "Delete";
+            btn2.Text = "Delete";
+            btn2.Name = "btn2";
+            btn2.UseColumnTextForButtonValue = true;
+            DataGridViewButtonColumn btn3 = new DataGridViewButtonColumn();
+            dataGridView1.Columns.Add(btn3);
+            btn3.HeaderText = "Retrieve data";
+            btn3.Text = "Retrieve data";
+            btn3.Name = "btn3";
+            btn3.UseColumnTextForButtonValue = true;
+            displayall();
 
         }
 
@@ -81,6 +100,7 @@ namespace UserCreationTool
             };
 
             SetResponse resp1 = await C1.SetTaskAsync("LocCount/node",LocData);
+            displayall();
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -229,6 +249,7 @@ namespace UserCreationTool
         {
             //this deletes all
             FirebaseResponse response = await C1.DeleteTaskAsync("Location/");
+            displayall();
         }
 
         private void button6_Click(object sender, EventArgs e)
@@ -278,6 +299,156 @@ namespace UserCreationTool
             this.Visible = false;
             AdminLogin al = new AdminLogin();
             al.ShowDialog();
+        }
+
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            //LoadData();
+            if (e.ColumnIndex == 4)
+            {
+                // MessageBox.Show();
+                String ABC = e.RowIndex.ToString();
+                // MessageBox.Show(ABC);
+                if (dataGridView1.SelectedCells.Count > 0)
+                {
+                    int selectedrowindex = e.RowIndex;
+                    DataGridViewRow selectedRow = dataGridView1.Rows[selectedrowindex];
+                    string placeName = Convert.ToString(selectedRow.Cells["Place Name"].Value);
+                    string UserN = Convert.ToString(selectedRow.Cells["USERNAME NAME"].Value);
+                    string PswN = Convert.ToString(selectedRow.Cells["PASSWORD"].Value);
+                    if (textBox1.Text != null && textBox1.Text != "" && textBox2.Text != null && textBox2.Text != "" && textBox3.Text != null && textBox3.Text != "")
+                    {
+                        editPlace(placeName, UserN, PswN);
+                    }
+                    else
+                    {
+                        MessageBox.Show("data cannot be invalid or blank!");
+                    }
+
+                }
+            }
+            if (e.ColumnIndex == 5)
+            {
+                // MessageBox.Show();
+                String ABC = e.RowIndex.ToString();
+                MessageBox.Show(ABC);
+                if (dataGridView1.SelectedCells.Count > 0)
+                {
+                    int selectedrowindex = e.RowIndex;
+                    DataGridViewRow selectedRow = dataGridView1.Rows[selectedrowindex];
+                    string placeName = Convert.ToString(selectedRow.Cells["Place Name"].Value);
+                    string UserN = Convert.ToString(selectedRow.Cells["USERNAME NAME"].Value);
+                    string PswN = Convert.ToString(selectedRow.Cells["PASSWORD"].Value);
+                    
+                    deletePlace(placeName, UserN,PswN);
+                }
+
+            }
+            if (e.ColumnIndex == 6)
+            {
+                // MessageBox.Show();
+                String ABC = e.RowIndex.ToString();
+                MessageBox.Show(ABC);
+                if (dataGridView1.SelectedCells.Count > 0)
+                {
+                    int selectedrowindex = e.RowIndex;
+                    DataGridViewRow selectedRow = dataGridView1.Rows[selectedrowindex];
+                    string placeName = Convert.ToString(selectedRow.Cells["Place Name"].Value);
+                    string UserN = Convert.ToString(selectedRow.Cells["USERNAME NAME"].Value);
+                    string PswN = Convert.ToString(selectedRow.Cells["PASSWORD"].Value);
+                    textBox1.Text = placeName;
+                    textBox2.Text = UserN;
+                    textBox3.Text = PswN;
+                }
+
+            }
+        }
+        async void editPlace(String PlaceName, string userName, string password)
+        {
+            FirebaseResponse response1 = await C1.GetTaskAsync("LocCount/node");
+            LocationCounter t2 = response1.ResultAs<LocationCounter>();
+
+            int checkV = Convert.ToInt32(t2.cnt);
+
+            //this part updates 
+
+            var data = new Data
+            {
+                placeName = PlaceName,
+                userName = userName,
+                password = password
+
+            };
+            bool check = false;
+            while (check == false && checkV > 0)
+            {
+                FirebaseResponse response2 = await C1.GetTaskAsync("Location/" + checkV);
+                Data t1 = response2.ResultAs<Data>();
+
+                if (t1.placeName == PlaceName)
+                {
+                    //SetResponse response = await C1.SetTaskAsync("Location/" + checkV, data);
+                    //this deletes specified
+                    FirebaseResponse response = await C1.UpdateTaskAsync("Location/" + checkV,data);
+                     Data result = response.ResultAs<Data>();
+                    check = true;
+                    MessageBox.Show("edited place");
+                }
+
+
+
+                checkV--;
+            }
+
+            if (check == false)
+            {
+                MessageBox.Show("cannot update as its not found");
+            }
+            displayall();
+            
+        }
+        async void deletePlace(String PlaceName,string userName,string password)
+        {
+            FirebaseResponse response1 = await C1.GetTaskAsync("LocCount/node");
+            LocationCounter t2 = response1.ResultAs<LocationCounter>();
+
+            int checkV = Convert.ToInt32(t2.cnt);
+
+            //this part updates 
+
+            var data = new Data
+            {
+                placeName = PlaceName,
+                userName = userName,
+                password = password
+
+            };
+            bool check = false;
+            while (check == false && checkV > 0)
+            {
+                FirebaseResponse response2 = await C1.GetTaskAsync("Location/" + checkV);
+                Data t1 = response2.ResultAs<Data>();
+
+                if (t1.placeName == PlaceName)
+                {
+                    //SetResponse response = await C1.SetTaskAsync("Location/" + checkV, data);
+                    //this deletes specified
+                    FirebaseResponse response = await C1.DeleteTaskAsync("Location/" + checkV);
+                    //  Data result = response.ResultAs<Data>();
+                    check = true;
+                    MessageBox.Show("deleted place");
+                }
+
+
+
+                checkV--;
+            }
+
+            if (check == false)
+            {
+                MessageBox.Show("cannot delete as its not found");
+            }
+            displayall();
         }
     }
 }

@@ -255,8 +255,8 @@ namespace UserCreationTool
             btn3.UseColumnTextForButtonValue = true;
              DataGridViewButtonColumn btn4 = new DataGridViewButtonColumn();
             dataGridView1.Columns.Add(btn4);
-            btn4.HeaderText = "Send data to the reader";
-            btn4.Text = "Send data to the reader";
+            btn4.HeaderText = "Send data ";
+            btn4.Text = "Send data ";
             btn4.Name = "btn4";
             btn4.UseColumnTextForButtonValue = true;
 

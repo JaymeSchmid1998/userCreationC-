@@ -879,7 +879,7 @@ async void EditUserData(string placeName,string firstName,string lastName,string
                     string status1 = comboBox1.Text;
                     string authC1 = comboBox2.Text;
                     string auth1 = label9.Text;
-                    if (textBox1.Text != null && textBox1.Text != "" && comboBox1.Text != "" && comboBox1.Text != "select one " && comboBox2.Text != "lowest" && comboBox2.Text != "highest" && comboBox2.Text != "")
+                    if (textBox1.Text != null && textBox1.Text != "" && textBox2.Text != null && textBox2.Text != "" && comboBox1.Text != "" && comboBox1.Text != "select one " && comboBox2.Text != "lowest" && comboBox2.Text != "highest" && comboBox2.Text != ""&&label9.Text !="no code")
                     {
                         EditUserData(placeName,firstN1,lastN1,auth1,authC1,status1);
                     }
