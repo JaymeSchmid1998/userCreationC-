@@ -32,6 +32,14 @@ namespace UserCreationTool
             set { _path = value; }
         }
 
+        private static string _path2 = @"C:\Users\zbook j\Desktop\test";
+
+        public static string GlobalVar4
+        {
+            get { return _path2; }
+            set { _path2 = value; }
+        }
+
 
     }
 }

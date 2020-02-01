@@ -34,12 +34,14 @@ namespace UserCreationTool
             //save to global variables
 
             GlobalVar.GlobalVar3= textBox1.Text;
+            GlobalVar.GlobalVar4 = textBox2.Text;
             MessageBox.Show("updated");
         }
 
         private void Settings_Load(object sender, EventArgs e)
         {
             textBox1.Text = GlobalVar.GlobalVar3;
+            textBox2.Text = GlobalVar.GlobalVar4;
         }
     }
 }

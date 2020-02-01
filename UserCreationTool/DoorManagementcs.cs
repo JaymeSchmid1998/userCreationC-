@@ -11,6 +11,10 @@ using System.Windows.Forms;
 using FireSharp.Config;
 using FireSharp.Interfaces;
 using FireSharp.Response;
+using FireSharp.Config;
+using FireSharp.Interfaces;
+using FireSharp.Response;
+using System.IO;
 
 namespace UserCreationTool
 {
@@ -249,6 +253,13 @@ namespace UserCreationTool
             btn3.Text = "Retrieve data";
             btn3.Name = "btn3";
             btn3.UseColumnTextForButtonValue = true;
+             DataGridViewButtonColumn btn4 = new DataGridViewButtonColumn();
+            dataGridView1.Columns.Add(btn4);
+            btn4.HeaderText = "Send data to the reader";
+            btn4.Text = "Send data to the reader";
+            btn4.Name = "btn4";
+            btn4.UseColumnTextForButtonValue = true;
+
 
 
             LoadData();
@@ -345,7 +356,156 @@ namespace UserCreationTool
                 }
 
             }
+            if (e.ColumnIndex == 7)
+            {
+                // MessageBox.Show();
+                String ABC = e.RowIndex.ToString();
+                MessageBox.Show(ABC);
+                if (dataGridView1.SelectedCells.Count > 0)
+                {
+                    int selectedrowindex = e.RowIndex;
+                    DataGridViewRow selectedRow = dataGridView1.Rows[selectedrowindex];
+                    string placeName = Convert.ToString(selectedRow.Cells["PlaceName"].Value);
+                    string doorN1 = Convert.ToString(selectedRow.Cells["DoorName"].Value);
+                    string status1 = Convert.ToString(selectedRow.Cells["Status"].Value);
+                    string authl1 = Convert.ToString(selectedRow.Cells["AuthLvl"].Value);
+                    // textBox1.Text = doorN1;
+                    //  comboBox2.Text = status1;
+                    // comboBox1.Text = authl1;
+                    createDoor(placeName, doorN1, status1, authl1);
+                }
+
+            }
         }
+        async void createDoor(string PlaceName, string DoorName, string Status, string AuthLvl)
+        {
+            string LocVar = GlobalVar.GlobalVar4;
+            //CHECK IF ITS VALID 
+
+            //checks if the data is in the db...
+
+
+            FirebaseResponse response1 = await C1.GetTaskAsync("DoorCount/node");
+            UserCounter t2 = response1.ResultAs<UserCounter>();
+
+            int checkV = Convert.ToInt32(t2.cnt);
+            //this part gets data from the data base 
+            bool found = false;
+            while (found == false && checkV > 0)
+            {
+                try
+                {
+                    FirebaseResponse response = await C1.GetTaskAsync("Doors/" + checkV);
+                    DoorData t1 = response.ResultAs<DoorData>();
+                    if (PlaceName == t1.placeName && DoorName == t1.DoorName && Status == t1.Status && AuthLvl == t1.AuthLevel)
+                    {
+                        //THIS IS WORKING
+                         
+
+                            string path = LocVar;
+
+                            string fileName = path + @"\DoorCreation.txt";
+                            MessageBox.Show(fileName);
+                            //         fileName =fileName.Replace(@"\\",@"\");
+
+                            try
+                            {
+                                // Check if file already exists. If yes, delete it.     
+                                if (File.Exists(fileName))
+                                {
+                                    File.Delete(fileName);
+                                }
+
+                                // Create a new file     
+                                using (StreamWriter FileWrite = File.CreateText(fileName))
+                                {
+
+                                    FileWrite.WriteLine("DoorName: {0:G}", t1.DoorName);
+
+                                }
+
+                                // Open the stream and read it back.    
+                                using (StreamReader sr = File.OpenText(fileName))
+                                {
+                                    string s = "";
+                                    while ((s = sr.ReadLine()) != null)
+                                    {
+                                        Console.WriteLine(s);
+                                    }
+                                }
+
+
+                              
+                                MessageBox.Show("door generated");
+
+                            }
+                            catch (Exception Ex)
+                            {
+                                Console.WriteLine(Ex.ToString());
+                                MessageBox.Show(Ex.ToString());
+                            }
+
+
+
+
+                        
+                        
+                      
+
+
+                        found = true;
+
+
+
+
+
+
+                    }
+                }
+                catch
+                {
+
+                }
+
+
+
+
+                checkV--;
+            }
+            if (found == false)
+            {
+                MessageBox.Show("not found");
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        }
+
+
+
+
+
+
+
+
+
+
         async void DeleteDoor(string placeName,string doorName,string status,string AuthLevel)
         {
             FirebaseResponse response1 = await C1.GetTaskAsync("DoorCount/node");
@@ -446,6 +606,6 @@ namespace UserCreationTool
             }
 
         }
-
+       
     }
 }

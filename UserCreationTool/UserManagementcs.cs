@@ -1055,6 +1055,7 @@ async void EditUserData(string placeName,string firstName,string lastName,string
                                 catch (Exception Ex)
                                 {
                                     Console.WriteLine(Ex.ToString());
+                                MessageBox.Show(Ex.ToString());
                                 }
 
 
