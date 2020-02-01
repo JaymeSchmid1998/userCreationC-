@@ -193,7 +193,7 @@ namespace UserCreationTool
             }
 
 
-
+            LoadUserData();
         
         }
      private long getrand1()

@@ -60,7 +60,8 @@ namespace UserCreationTool
             };
 
             SetResponse resp1 = await C1.SetTaskAsync("DoorCount/node", LocData);
-         //   button3.Visible = true;
+            //   button3.Visible = true;
+            LoadData();
         }
        
 

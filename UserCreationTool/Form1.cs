@@ -258,7 +258,7 @@ namespace UserCreationTool
         }
         private async void displayall()
         {
-            
+            datT.Rows.Clear();
             FirebaseResponse response1 = await C1.GetTaskAsync("LocCount/node");
             LocationCounter t2 = response1.ResultAs<LocationCounter>();
 
@@ -304,7 +304,7 @@ namespace UserCreationTool
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
             //LoadData();
-            if (e.ColumnIndex == 4)
+            if (e.ColumnIndex == 3)
             {
                 // MessageBox.Show();
                 String ABC = e.RowIndex.ToString();
@@ -327,7 +327,7 @@ namespace UserCreationTool
 
                 }
             }
-            if (e.ColumnIndex == 5)
+            if (e.ColumnIndex == 4)
             {
                 // MessageBox.Show();
                 String ABC = e.RowIndex.ToString();
@@ -344,7 +344,7 @@ namespace UserCreationTool
                 }
 
             }
-            if (e.ColumnIndex == 6)
+            if (e.ColumnIndex == 5)
             {
                 // MessageBox.Show();
                 String ABC = e.RowIndex.ToString();
@@ -376,7 +376,7 @@ namespace UserCreationTool
             {
                 placeName = PlaceName,
                 userName = userName,
-                password = password
+                password = textBox2.Text
 
             };
             bool check = false;
