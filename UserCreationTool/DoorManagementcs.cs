@@ -56,13 +56,13 @@ namespace UserCreationTool
             };
 
             SetResponse resp1 = await C1.SetTaskAsync("DoorCount/node", LocData);
-            button3.Visible = true;
+         //   button3.Visible = true;
         }
        
 
         private async void button3_Click(object sender, EventArgs e)
         {
-            FirebaseResponse response1 = await C1.GetTaskAsync("DoorCount/node");
+         /*   FirebaseResponse response1 = await C1.GetTaskAsync("DoorCount/node");
             DoorCount t2 = response1.ResultAs<DoorCount>();
 
             int checkV = Convert.ToInt32(t2.cnt);
@@ -106,6 +106,7 @@ namespace UserCreationTool
             {
                 MessageBox.Show("cannot delete as its not found");
             }
+            */
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -181,7 +182,7 @@ namespace UserCreationTool
                             comboBox1.Text = t1.AuthLevel;
                             MessageBox.Show(" found");
                             found = true;
-                            button3.Visible = true;
+                        //    button3.Visible = true;
                         }
                        
                        
@@ -242,6 +243,12 @@ namespace UserCreationTool
             btn2.Text = "Delete";
             btn2.Name = "btn2";
             btn2.UseColumnTextForButtonValue = true;
+            DataGridViewButtonColumn btn3 = new DataGridViewButtonColumn();
+            dataGridView1.Columns.Add(btn3);
+            btn3.HeaderText = "Retrieve data";
+            btn3.Text = "Retrieve data";
+            btn3.Name = "btn3";
+            btn3.UseColumnTextForButtonValue = true;
 
 
             LoadData();
@@ -280,9 +287,27 @@ namespace UserCreationTool
             //LoadData();
             if (e.ColumnIndex == 4)
             {
-               // MessageBox.Show();
+                // MessageBox.Show();
                 String ABC = e.RowIndex.ToString();
-                MessageBox.Show(ABC);
+               // MessageBox.Show(ABC);
+                if (dataGridView1.SelectedCells.Count > 0)
+                {
+                    int selectedrowindex = e.RowIndex;
+                    DataGridViewRow selectedRow = dataGridView1.Rows[selectedrowindex];
+                    string placeName = Convert.ToString(selectedRow.Cells["PlaceName"].Value);
+                    string doorN1 = textBox1.Text;
+                    string status1 = comboBox2.Text;
+                    string authl1 = comboBox1.Text;
+                    if (textBox1.Text !=null&&textBox1.Text!=""&&comboBox1.Text !=""&&comboBox1.Text != "select one "&& comboBox2.Text != "lowest" && comboBox2.Text!= "highest" && comboBox2.Text !="" )
+                    {
+                        EditDoor(placeName, doorN1, status1, authl1);
+                    }
+                    else
+                    {
+                        MessageBox.Show("data cannot be invalid or blank!");
+                    }
+                   
+                }
             }
             if (e.ColumnIndex == 5)
             {
@@ -293,11 +318,134 @@ namespace UserCreationTool
                 {
                     int selectedrowindex = e.RowIndex;
                     DataGridViewRow selectedRow = dataGridView1.Rows[selectedrowindex];
-                    string a = Convert.ToString(selectedRow.Cells["PlaceName"].Value);
-                    MessageBox.Show(a);
+                    string placeName = Convert.ToString(selectedRow.Cells["PlaceName"].Value);
+                    string doorN1 = Convert.ToString(selectedRow.Cells["DoorName"].Value);
+                    string status1 = Convert.ToString(selectedRow.Cells["Status"].Value);
+                    string authl1 = Convert.ToString(selectedRow.Cells["AuthLvl"].Value);
+                    DeleteDoor(placeName,doorN1,status1,authl1);
+                }
+
+            }
+            if (e.ColumnIndex == 6)
+            {
+                // MessageBox.Show();
+                String ABC = e.RowIndex.ToString();
+                MessageBox.Show(ABC);
+                if (dataGridView1.SelectedCells.Count > 0)
+                {
+                    int selectedrowindex = e.RowIndex;
+                    DataGridViewRow selectedRow = dataGridView1.Rows[selectedrowindex];
+                    string placeName = Convert.ToString(selectedRow.Cells["PlaceName"].Value);
+                    string doorN1 = Convert.ToString(selectedRow.Cells["DoorName"].Value);
+                    string status1 = Convert.ToString(selectedRow.Cells["Status"].Value);
+                    string authl1 = Convert.ToString(selectedRow.Cells["AuthLvl"].Value);
+                    textBox1.Text = doorN1;
+                    comboBox2.Text = status1;
+                    comboBox1.Text = authl1;
                 }
 
             }
         }
+        async void DeleteDoor(string placeName,string doorName,string status,string AuthLevel)
+        {
+            FirebaseResponse response1 = await C1.GetTaskAsync("DoorCount/node");
+            DoorCount t2 = response1.ResultAs<DoorCount>();
+
+            int checkV = Convert.ToInt32(t2.cnt);
+
+            //this part updates 
+
+            var data = new DoorData
+            {
+                placeName = placeName,
+                DoorName = doorName,
+                Status = status,
+                AuthLevel = AuthLevel
+
+            };
+            bool check = false;
+            while (check == false && checkV > 0)
+            {
+                FirebaseResponse response2 = await C1.GetTaskAsync("Doors/" + checkV);
+                DoorData t1 = response2.ResultAs<DoorData>();
+
+                if (t1.placeName == label1.Text)
+                {
+                    if (t1.DoorName == textBox1.Text)
+                    {
+                        //SetResponse response = await C1.SetTaskAsync("Location/" + checkV, data);
+                        //this deletes specified
+                        FirebaseResponse response = await C1.DeleteTaskAsync("Doors/" + checkV);
+                        //  Data result = response.ResultAs<Data>();
+                        check = true;
+                        MessageBox.Show("deleted");
+                        LoadData();
+                    }
+
+                }
+
+
+
+                checkV--;
+            }
+
+            if (check == false)
+            {
+                MessageBox.Show("cannot delete as its not found");
+            }
+        }
+
+
+
+        async void EditDoor(string placeName, string doorName, string status, string AuthLevel)
+        {
+            FirebaseResponse response1 = await C1.GetTaskAsync("DoorCount/node");
+            DoorCount t2 = response1.ResultAs<DoorCount>();
+
+            int checkV = Convert.ToInt32(t2.cnt);
+
+            //this part updates 
+
+            var data = new DoorData
+            {
+                placeName = placeName,
+                DoorName = doorName,
+                Status = status,
+                AuthLevel = AuthLevel
+
+            };
+            bool check = false;
+            while (check == false && checkV > 0)
+            {
+                FirebaseResponse response2 = await C1.GetTaskAsync("Doors/" + checkV);
+                DoorData t1 = response2.ResultAs<DoorData>();
+
+                if (t1.placeName == label1.Text)
+                {
+                    if (t1.DoorName == textBox1.Text)
+                    {
+                        //SetResponse response = await C1.SetTaskAsync("Location/" + checkV, data);
+                        //this deletes specified
+                        FirebaseResponse response = await C1.UpdateTaskAsync("Doors/" + checkV,data);
+                        Data result = response.ResultAs<Data>();
+                        check = true;
+                        MessageBox.Show("edited : "+t1.placeName);
+                        LoadData();
+                    }
+
+                }
+
+
+
+                checkV--;
+            }
+
+            if (check == false)
+            {
+                MessageBox.Show("cannot delete as its not found");
+            }
+
+        }
+
     }
 }
