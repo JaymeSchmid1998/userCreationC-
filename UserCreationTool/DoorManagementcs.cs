@@ -575,25 +575,31 @@ namespace UserCreationTool
             bool check = false;
             while (check == false && checkV > 0)
             {
-                FirebaseResponse response2 = await C1.GetTaskAsync("Doors/" + checkV);
-                DoorData t1 = response2.ResultAs<DoorData>();
-
-                if (t1.placeName == label1.Text)
+                try
                 {
-                    if (t1.DoorName == textBox1.Text)
+                    FirebaseResponse response2 = await C1.GetTaskAsync("Doors/" + checkV);
+                    DoorData t1 = response2.ResultAs<DoorData>();
+
+                    if (t1.placeName == label1.Text)
                     {
-                        //SetResponse response = await C1.SetTaskAsync("Location/" + checkV, data);
-                        //this deletes specified
-                        FirebaseResponse response = await C1.UpdateTaskAsync("Doors/" + checkV,data);
-                        Data result = response.ResultAs<Data>();
-                        check = true;
-                        MessageBox.Show("edited : "+t1.placeName);
-                        LoadData();
+                        if (t1.DoorName == textBox1.Text)
+                        {
+                            //SetResponse response = await C1.SetTaskAsync("Location/" + checkV, data);
+                            //this deletes specified
+                            FirebaseResponse response = await C1.UpdateTaskAsync("Doors/" + checkV, data);
+                            Data result = response.ResultAs<Data>();
+                            check = true;
+                            MessageBox.Show("edited : " + t1.placeName);
+                            LoadData();
+                        }
+
                     }
 
                 }
-
-
+                catch 
+                {
+                    //this goes through the entire loop and it was null so dont crash.
+                }
 
                 checkV--;
             }

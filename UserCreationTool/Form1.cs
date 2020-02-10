@@ -382,17 +382,24 @@ namespace UserCreationTool
             bool check = false;
             while (check == false && checkV > 0)
             {
-                FirebaseResponse response2 = await C1.GetTaskAsync("Location/" + checkV);
-                Data t1 = response2.ResultAs<Data>();
-
-                if (t1.placeName == PlaceName)
+                try
                 {
-                    //SetResponse response = await C1.SetTaskAsync("Location/" + checkV, data);
-                    //this deletes specified
-                    FirebaseResponse response = await C1.UpdateTaskAsync("Location/" + checkV,data);
-                     Data result = response.ResultAs<Data>();
-                    check = true;
-                    MessageBox.Show("edited place");
+                    FirebaseResponse response2 = await C1.GetTaskAsync("Location/" + checkV);
+                    Data t1 = response2.ResultAs<Data>();
+
+                    if (t1.placeName == PlaceName)
+                    {
+                        //SetResponse response = await C1.SetTaskAsync("Location/" + checkV, data);
+                        //this deletes specified
+                        FirebaseResponse response = await C1.UpdateTaskAsync("Location/" + checkV, data);
+                        Data result = response.ResultAs<Data>();
+                        check = true;
+                        MessageBox.Show("edited place");
+                    }
+                }
+                catch
+                {
+
                 }
 
 

@@ -800,33 +800,39 @@ async void EditUserData(string placeName,string firstName,string lastName,string
             bool check = false;
             while (check == false && checkV > 0)
             {
-                FirebaseResponse response2 = await C1.GetTaskAsync("Users/" + checkV);
-                UserData t1 = response2.ResultAs<UserData>();
-
-                if (t1.PlaceName == placeName)
+                try
                 {
-                    if (t1.FirstName == firstName)
+                    FirebaseResponse response2 = await C1.GetTaskAsync("Users/" + checkV);
+                    UserData t1 = response2.ResultAs<UserData>();
+
+                    if (t1.PlaceName == placeName)
                     {
-                        if (t1.LastName == lastName)
+                        if (t1.FirstName == firstName)
                         {
-                            FirebaseResponse response = await C1.UpdateTaskAsync("Users/" + checkV,data);
-                            //  Data result = response.ResultAs<Data>();
-                            check = true;
-                            MessageBox.Show("Updated");
-                            // button2.Visible = false;
-                            // button3.Visible = false;
-                            textBox1.Text = "";
-                            textBox2.Text = "";
-                            comboBox1.Text = "";
-                            comboBox2.Text = "";
-                            label9.Text = "no code";
+                            if (t1.LastName == lastName)
+                            {
+                                FirebaseResponse response = await C1.UpdateTaskAsync("Users/" + checkV, data);
+                                //  Data result = response.ResultAs<Data>();
+                                check = true;
+                                MessageBox.Show("Updated");
+                                // button2.Visible = false;
+                                // button3.Visible = false;
+                                textBox1.Text = "";
+                                textBox2.Text = "";
+                                comboBox1.Text = "";
+                                comboBox2.Text = "";
+                                label9.Text = "no code";
+                            }
                         }
+                        //SetResponse response = await C1.SetTaskAsync("Location/" + checkV, data);
+                        //this deletes specified
+
                     }
-                    //SetResponse response = await C1.SetTaskAsync("Location/" + checkV, data);
-                    //this deletes specified
+                }
+                catch
+                {
 
                 }
-
 
 
                 checkV--;
