@@ -331,7 +331,7 @@ namespace UserCreationTool
             {
                 // MessageBox.Show();
                 String ABC = e.RowIndex.ToString();
-                MessageBox.Show(ABC);
+             //   MessageBox.Show(ABC);
                 if (dataGridView1.SelectedCells.Count > 0)
                 {
                     int selectedrowindex = e.RowIndex;
@@ -348,7 +348,7 @@ namespace UserCreationTool
             {
                 // MessageBox.Show();
                 String ABC = e.RowIndex.ToString();
-                MessageBox.Show(ABC);
+              //  MessageBox.Show(ABC);
                 if (dataGridView1.SelectedCells.Count > 0)
                 {
                     int selectedrowindex = e.RowIndex;

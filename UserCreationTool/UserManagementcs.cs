@@ -900,7 +900,7 @@ async void EditUserData(string placeName,string firstName,string lastName,string
             {
                 // MessageBox.Show();
                 String ABC = e.RowIndex.ToString();
-                MessageBox.Show(ABC);
+              //  MessageBox.Show(ABC);
                 if (dataGridView1.SelectedCells.Count > 0)
                 {
                     int selectedrowindex = e.RowIndex;
@@ -917,7 +917,7 @@ async void EditUserData(string placeName,string firstName,string lastName,string
             {
                 // MessageBox.Show();
                 String ABC = e.RowIndex.ToString();
-                MessageBox.Show(ABC);
+                //MessageBox.Show(ABC);
                 if (dataGridView1.SelectedCells.Count > 0)
                 {
 
@@ -958,7 +958,7 @@ async void EditUserData(string placeName,string firstName,string lastName,string
             {
                 // MessageBox.Show();
                 String ABC = e.RowIndex.ToString();
-                MessageBox.Show(ABC);
+               // MessageBox.Show(ABC);
                 if (dataGridView1.SelectedCells.Count > 0)
                 {
                     int selectedrowindex = e.RowIndex;
@@ -971,8 +971,10 @@ async void EditUserData(string placeName,string firstName,string lastName,string
                     string auth1 = Convert.ToString(selectedRow.Cells["authlevel"].Value);
                     //    
                     createId(placeName,firstName,lastName,status1,auth1,authC1);
+                    
                 }
-
+                LoadUserData();
+               
             }
         }
 
@@ -1005,7 +1007,7 @@ async void EditUserData(string placeName,string firstName,string lastName,string
                                 string path = LocVar;
 
                                 string fileName = path + @"\UserCreation.txt";
-                            MessageBox.Show(fileName);
+                          //  MessageBox.Show(fileName);
                    //         fileName =fileName.Replace(@"\\",@"\");
 
                                 try
@@ -1055,7 +1057,7 @@ async void EditUserData(string placeName,string firstName,string lastName,string
 
                                     SetResponse response6 = await C1.SetTaskAsync("Users/" + checkV, data);
                                     Data result = response6.ResultAs<Data>();
-                                    MessageBox.Show("updated");
+                                  //  MessageBox.Show("updated");
 
                                 }
                                 catch (Exception Ex)
@@ -1104,7 +1106,7 @@ async void EditUserData(string placeName,string firstName,string lastName,string
                                 }
                                 if (isrand == false && randgen != 0)
                                 {
-                                    MessageBox.Show("not found");
+                                   // MessageBox.Show("not found");
                                     //save this to the global variable
                                     GlobalVar.GlobalVar2 = randgen;
                                 }
@@ -1175,7 +1177,7 @@ async void EditUserData(string placeName,string firstName,string lastName,string
 
                                     SetResponse response6 = await C1.SetTaskAsync("Users/" + checkV, data);
                                     Data result = response6.ResultAs<Data>();
-                                    MessageBox.Show("updated");
+                                  //  MessageBox.Show("updated");
 
                                 }
                                 catch (Exception Ex)
@@ -1229,7 +1231,7 @@ async void EditUserData(string placeName,string firstName,string lastName,string
                 }
                 if (found == false)
                 {
-                    MessageBox.Show("not found");
+                  //  MessageBox.Show("not found");
                 }
 
 

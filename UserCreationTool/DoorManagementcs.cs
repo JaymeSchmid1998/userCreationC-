@@ -322,7 +322,7 @@ namespace UserCreationTool
             {
                 // MessageBox.Show();
                 String ABC = e.RowIndex.ToString();
-                MessageBox.Show(ABC);
+              //  MessageBox.Show(ABC);
                 if (dataGridView1.SelectedCells.Count > 0)
                 {
                     int selectedrowindex = e.RowIndex;
@@ -339,7 +339,7 @@ namespace UserCreationTool
             {
                 // MessageBox.Show();
                 String ABC = e.RowIndex.ToString();
-                MessageBox.Show(ABC);
+             //   MessageBox.Show(ABC);
                 if (dataGridView1.SelectedCells.Count > 0)
                 {
                     int selectedrowindex = e.RowIndex;
@@ -358,7 +358,7 @@ namespace UserCreationTool
             {
                 // MessageBox.Show();
                 String ABC = e.RowIndex.ToString();
-                MessageBox.Show(ABC);
+              //  MessageBox.Show(ABC);
                 if (dataGridView1.SelectedCells.Count > 0)
                 {
                     int selectedrowindex = e.RowIndex;
@@ -371,6 +371,7 @@ namespace UserCreationTool
                     //  comboBox2.Text = status1;
                     // comboBox1.Text = authl1;
                     createDoor(placeName, doorN1, status1, authl1);
+                    LoadData();
                 }
 
             }
@@ -403,7 +404,7 @@ namespace UserCreationTool
                             string path = LocVar;
 
                             string fileName = path + @"\DoorCreation.txt";
-                            MessageBox.Show(fileName);
+                         //   MessageBox.Show(fileName);
                             //         fileName =fileName.Replace(@"\\",@"\");
 
                             try

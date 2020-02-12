@@ -43,16 +43,16 @@
             this.label4.Location = new System.Drawing.Point(231, 27);
             this.label4.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(43, 13);
+            this.label4.Size = new System.Drawing.Size(45, 13);
             this.label4.TabIndex = 27;
-            this.label4.Text = "settings";
+            this.label4.Text = "Settings";
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(51, 198);
-            this.button2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button2.Location = new System.Drawing.Point(51, 222);
+            this.button2.Margin = new System.Windows.Forms.Padding(2);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(422, 22);
+            this.button2.Size = new System.Drawing.Size(422, 43);
             this.button2.TabIndex = 26;
             this.button2.Text = "Back";
             this.button2.UseVisualStyleBackColor = true;
@@ -60,12 +60,12 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(51, 159);
-            this.button1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button1.Location = new System.Drawing.Point(51, 154);
+            this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(422, 22);
+            this.button1.Size = new System.Drawing.Size(422, 43);
             this.button1.TabIndex = 24;
-            this.button1.Text = "update path";
+            this.button1.Text = "Update path";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
@@ -75,16 +75,16 @@
             this.label1.Location = new System.Drawing.Point(48, 69);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(88, 13);
+            this.label1.Size = new System.Drawing.Size(94, 13);
             this.label1.TabIndex = 21;
-            this.label1.Text = "UserStoragePath";
+            this.label1.Text = "User Storage Path";
             // 
             // textBox1
             // 
             this.textBox1.Location = new System.Drawing.Point(234, 66);
-            this.textBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox1.Margin = new System.Windows.Forms.Padding(2);
             this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(226, 20);
+            this.textBox1.Size = new System.Drawing.Size(239, 20);
             this.textBox1.TabIndex = 20;
             // 
             // label2
@@ -93,16 +93,16 @@
             this.label2.Location = new System.Drawing.Point(48, 117);
             this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(89, 13);
+            this.label2.Size = new System.Drawing.Size(95, 13);
             this.label2.TabIndex = 28;
-            this.label2.Text = "DoorStoragePath";
+            this.label2.Text = "Door Storage Path";
             // 
             // textBox2
             // 
             this.textBox2.Location = new System.Drawing.Point(234, 110);
             this.textBox2.Margin = new System.Windows.Forms.Padding(2);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(226, 20);
+            this.textBox2.Size = new System.Drawing.Size(239, 20);
             this.textBox2.TabIndex = 29;
             // 
             // Settings
@@ -117,9 +117,9 @@
             this.Controls.Add(this.button1);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.textBox1);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Settings";
-            this.Text = "AdminLogin";
+            this.Text = "Settings";
             this.Load += new System.EventHandler(this.Settings_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
